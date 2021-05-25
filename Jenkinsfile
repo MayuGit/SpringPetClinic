@@ -25,7 +25,7 @@ pipeline{
         }
         stage('Deploy'){
             steps{
-                sh 'java -jar /var/jenkins_home/workspace/myrunpipeline/target/spring-petclinic-2.1.0.BUILD-SNAPSHOT.jar'
+                sh 'java -jar ${WORKSPACE}/target/*.jar'
             }
         }
     }
