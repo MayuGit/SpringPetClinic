@@ -1,31 +1,52 @@
 pipeline{
+     environment {
+        registry = "mayupdocker/petclinic"
+        registryCredential = 'dockerhub'
+        dockerImage = ''
+    }
     agent{label 'master'}
     tools{maven 'Maven3'}
     
     stages{
-        stage('Checkout'){
+        stage('App Checkout'){
             steps{
                 git branch: 'main', url: 'https://github.com/MayuGit/SpringPetClinic.git'
             }
         }
-        stage('Build'){
+        stage(' App Build'){
             steps{
                 sh 'mvn compile'
             }
         }
-        stage('Test'){
+        stage('App Run Test'){
             steps{
                 sh 'mvn test'
             }
         }
-        stage('Package'){
+        stage('App Package'){
             steps{
                 sh 'mvn package'
             }
         }
-        stage('Deploy'){
+        //stage('Deploy'){
+        //    steps{
+        //        sh 'java -jar ${WORKSPACE}/target/*.jar'
+        //    }
+        //}
+        stage('Building Docker image') {
             steps{
-                sh 'java -jar ${WORKSPACE}/target/*.jar'
+                script {
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                }
+            }
+        }
+        stage('Upload Image to DockerHUB') {
+            steps {    
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                    dockerImage.push()
+                    }
+                }
             }
         }
     }
