@@ -49,6 +49,17 @@ pipeline{
                 }
             }
         }
+         
+        stage('Deploy image on client') {
+           steps {
+               script{
+                   sh 'cp /var/jenkins_home/playbooks/dockerlogin.yml ${WORKSPACE}/dockerlogin.yml'
+               }
+               ansiblePlaybook credentialsId: 'sshvagrant5', installation: 'myansible', playbook: '/var/jenkins_home/playbooks/dockerlogin.yml'
+           }
+        }
+         
+        
     }
     
 }
