@@ -18,11 +18,11 @@ pipeline{
                 sh 'mvn compile'
             }
         }
-        stage('App Run Test'){
-            steps{
-                sh 'mvn test'
-            }
-        }
+        //stage('App Run Test'){
+        //    steps{
+        //        sh 'mvn test'
+        //    }
+        //}
         stage('App Package'){
             steps{
                 sh 'mvn package'
